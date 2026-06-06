@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERYLON — Competitor Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --ink: #141210;
+  --parchment: #F2EDE4;
+  --warm-white: #FAF7F2;
+  --gold: #B8965A;
+  --gold-pale: #D4B483;
+  --gold-deep: #8A6B38;
+  --ash: #9A8E82;
+  --rust: #B55A3A;
+  --sage: #6E8A72;
+  --surface: #1E1A16;
+  --surface2: #252018;
+  --border: rgba(184,150,90,0.2);
+  --border-soft: rgba(184,150,90,0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--ink);
+  color: var(--parchment);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* HEADER */
+header {
+  padding: 1.75rem 3rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(20,18,16,0.92);
+  backdrop-filter: blur(20px);
+}
+
+.wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 1.5rem;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.header-sub {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ash);
+  margin-top: 0.2rem;
+}
+.header-right { display: flex; align-items: center; gap: 2rem; }
+.live-indicator {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.6rem; color: var(--ash); letter-spacing: 0.08em;
+}
+.live-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--sage);
+  animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+/* MAIN */
+main { padding: 3rem 3rem 5rem; max-width: 1380px; margin: 0 auto; position: relative; z-index: 1; }
+
+/* HERO */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: end;
+  margin-bottom: 3rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.2rem;
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--warm-white);
+}
+.hero-title em { font-style: italic; color: var(--gold-pale); }
+.hero-claim {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--ash);
+  margin-top: 1rem;
+  letter-spacing: 0.05em;
+}
+.hero-right { }
+.hero-desc {
+  font-size: 0.68rem;
+  color: var(--ash);
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+.brand-pillars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.pillar-tag {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--border);
+  color: var(--gold-pale);
+}
+
+/* CONTROLS */
+.controls-section { margin-bottom: 2rem; }
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.control-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ash);
+  min-width: 90px;
+}
+
+.brand-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.45rem 1rem;
+  border: 1px solid rgba(184,150,90,0.25);
+  background: transparent;
+  color: var(--ash);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.brand-btn:hover { border-color: var(--gold); color: var(--gold-pale); }
+.brand-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+
+.platform-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(154,142,130,0.2);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--ash);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.platform-btn:hover { border-color: var(--gold); color: var(--gold-pale); }
+.platform-btn.active { background: rgba(184,150,90,0.1); border-color: var(--gold); color: var(--gold-pale); }
+
+.custom-row {
+  display: none;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.custom-row.visible { display: flex; }
+.custom-input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.9rem;
+  color: var(--parchment);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.custom-input:focus { border-color: var(--gold); }
+.custom-input::placeholder { color: rgba(154,142,130,0.4); }
+
+/* STATS */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+  background: var(--border-soft);
+  gap: 1px;
+}
+.stat-box {
+  background: var(--ink);
+  padding: 1rem 1.25rem;
+}
+.stat-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem;
+  font-weight: 300;
+  color: var(--gold);
+  display: block;
+  line-height: 1;
+}
+.stat-l {
+  font-size: 0.56rem;
+  color: var(--ash);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+
+/* CTA */
+.cta-btn {
+  width: 100%;
+  padding: 1.1rem 2rem;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold-pale);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.cta-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+.cta-btn:hover { color: var(--ink); }
+.cta-btn:hover::after { transform: translateX(0); }
+.cta-btn:disabled { border-color: var(--ash); color: var(--ash); cursor: not-allowed; }
+.cta-btn:disabled::after { display: none; }
+
+/* PROGRESS */
+.progress-wrap { margin-bottom: 2rem; display: none; }
+.progress-wrap.visible { display: block; }
+.progress-label {
+  font-size: 0.6rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  font-family: 'DM Mono', monospace;
+}
+.progress-track {
+  height: 1px;
+  background: rgba(184,150,90,0.15);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--gold);
+  width: 0;
+  transition: width 0.5s ease;
+}
+
+/* ERROR */
+.error-msg {
+  display: none;
+  border: 1px solid rgba(181,90,58,0.4);
+  padding: 1rem 1.25rem;
+  color: var(--rust);
+  font-size: 0.68rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* RESULTS */
+.results { display: none; }
+.results.visible { display: block; }
+
+/* DIVIDER */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 2.5rem 0 1.5rem;
+}
+.section-divider-line { flex: 1; height: 1px; background: var(--border-soft); }
+.section-divider-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ash);
+  white-space: nowrap;
+}
+.section-divider-count {
+  font-size: 0.56rem;
+  color: rgba(154,142,130,0.5);
+  letter-spacing: 0.05em;
+}
+
+/* STRATEGIC SUMMARY */
+.strategic-box {
+  border-left: 2px solid var(--gold);
+  padding: 1.25rem 1.75rem;
+  background: rgba(184,150,90,0.04);
+  margin-bottom: 2rem;
+  font-size: 0.74rem;
+  line-height: 1.85;
+  color: var(--parchment);
+}
+.strategic-box strong { color: var(--gold-pale); font-weight: 400; }
+
+/* SENTIMENT TABLE */
+.sentiment-table {
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.st-header, .st-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr 90px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.st-row:last-child { border-bottom: none; }
+.st-header { background: rgba(184,150,90,0.05); }
+.st-cell {
+  padding: 0.8rem 1rem;
+  border-right: 1px solid var(--border-soft);
+  font-size: 0.63rem;
+}
+.st-cell:last-child { border-right: none; }
+.st-head-cell {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+.brand-name-cell {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: var(--warm-white);
+}
+.bar-group { }
+.bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 4px; }
+.bar-track {
+  flex: 1; height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar-track.pos-track { background: rgba(110,138,114,0.2); }
+.bar-track.neg-track { background: rgba(181,90,58,0.15); }
+.bar-fill { height: 100%; border-radius: 2px; }
+.bar-fill.pos { background: var(--sage); }
+.bar-fill.neg { background: var(--rust); }
+.bar-pct { font-size: 0.56rem; color: var(--ash); min-width: 28px; }
+.praise-complaint { font-size: 0.61rem; line-height: 1.6; }
+.praise { color: rgba(110,138,114,0.85); }
+.complaint { color: rgba(181,90,58,0.85); margin-top: 3px; }
+.nps-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--gold);
+}
+
+/* CATEGORY GRID */
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border-soft);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.cat-col { background: var(--ink); }
+.cat-col-head {
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cat-col-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.cat-col-title.pos { color: var(--sage); }
+.cat-col-title.neg { color: var(--rust); }
+.cat-count { font-size: 0.56rem; color: var(--ash); }
+
+.cat-item {
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid var(--border-soft);
+  display: grid;
+  grid-template-columns: 6px 1fr auto;
+  gap: 0.7rem;
+  align-items: start;
+  transition: background 0.12s;
+}
+.cat-item:hover { background: rgba(184,150,90,0.03); }
+.cat-item:last-child { border-bottom: none; }
+.cat-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.cat-dot.p1 { background: var(--gold); }
+.cat-dot.p2 { background: var(--sage); }
+.cat-dot.p3 { background: var(--ash); }
+.cat-body { }
+.cat-theme {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+  margin-bottom: 0.2rem;
+}
+.cat-insight { font-size: 0.65rem; line-height: 1.6; color: var(--ash); }
+.cat-verylon { font-size: 0.58rem; margin-top: 0.3rem; }
+.cat-verylon.pos-verylon { color: rgba(110,138,114,0.8); }
+.cat-verylon.neg-verylon { color: rgba(181,90,58,0.8); }
+.cat-right { text-align: right; }
+.weight-pill {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+}
+.weight-pill.HIGH { background: rgba(184,150,90,0.15); color: var(--gold-pale); }
+.weight-pill.MEDIUM { background: rgba(154,142,130,0.12); color: var(--ash); }
+.weight-pill.LOW { background: rgba(30,26,22,0.8); color: rgba(154,142,130,0.5); }
+.cat-platform { font-size: 0.54rem; color: rgba(154,142,130,0.5); margin-top: 0.3rem; }
+
+/* PRIORITY MATRIX */
+.matrix-outer { margin-bottom: 2rem; }
+.matrix-layout {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+.matrix-y-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ash);
+  text-align: center;
+}
+.matrix-inner-wrap { }
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1px;
+  background: var(--border-soft);
+  border: 1px solid var(--border);
+  min-height: 380px;
+}
+.matrix-cell {
+  background: var(--ink);
+  padding: 1.1rem;
+  overflow-y: auto;
+}
+.matrix-cell-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.matrix-cell-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+.matrix-tag {
+  font-size: 0.5rem;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+}
+.matrix-tag.act { background: rgba(184,150,90,0.18); color: var(--gold-pale); }
+.matrix-tag.watch { background: rgba(110,138,114,0.15); color: var(--sage); }
+.matrix-tag.consider { background: rgba(154,142,130,0.12); color: var(--ash); }
+.matrix-tag.skip { background: rgba(30,26,22,0.9); color: rgba(154,142,130,0.4); }
+.matrix-item {
+  font-size: 0.63rem;
+  line-height: 1.5;
+  color: var(--parchment);
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.35rem;
+  border-left: 2px solid;
+}
+.matrix-item.act { border-color: var(--gold); background: rgba(184,150,90,0.04); }
+.matrix-item.watch { border-color: var(--sage); background: rgba(110,138,114,0.04); }
+.matrix-item.consider { border-color: var(--ash); background: rgba(154,142,130,0.03); }
+.matrix-item.skip { border-color: rgba(154,142,130,0.2); color: var(--ash); }
+.matrix-x-label {
+  text-align: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ash);
+  padding: 0.6rem 0;
+}
+
+/* OPPORTUNITIES */
+.opp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border-soft);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.opp-card {
+  background: var(--ink);
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.15s;
+}
+.opp-card:hover { background: var(--surface2); }
+.opp-stripe {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.tier-1 .opp-stripe { background: var(--gold); }
+.tier-2 .opp-stripe { background: var(--sage); }
+.tier-3 .opp-stripe { background: var(--ash); }
+.opp-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: rgba(184,150,90,0.1);
+  position: absolute;
+  top: 0.25rem;
+  right: 0.75rem;
+  line-height: 1;
+}
+.opp-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+}
+.opp-desc { font-size: 0.65rem; line-height: 1.7; color: var(--ash); margin-bottom: 0.75rem; }
+.opp-signal {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.72rem;
+  color: var(--gold-pale);
+  opacity: 0.75;
+}
+
+/* QUOTES */
+.quotes-list { border: 1px solid var(--border); margin-bottom: 2rem; }
+.quote-item {
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--border-soft);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+  transition: background 0.12s;
+}
+.quote-item:hover { background: rgba(184,150,90,0.02); }
+.quote-item:last-child { border-bottom: none; }
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+.quote-text.pos { color: rgba(110,138,114,0.85); }
+.quote-text.neg { color: rgba(181,90,58,0.8); }
+.quote-meta { text-align: right; flex-shrink: 0; }
+.quote-brand {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+.quote-platform { font-size: 0.56rem; color: rgba(154,142,130,0.55); margin-top: 2px; }
+.quote-weight { font-size: 0.56rem; color: var(--gold-pale); margin-top: 4px; }
+
+/* IMPLICATIONS */
+.impl-block {
+  border: 1px solid var(--border);
+  padding: 2rem 2.25rem;
+  background: rgba(184,150,90,0.03);
+  margin-bottom: 2rem;
+}
+.impl-header {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.impl-header::before {
+  content: 'VERYLON';
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  font-size: 0.9rem;
+  color: var(--gold-pale);
+}
+.impl-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.impl-col-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.impl-point {
+  font-size: 0.64rem;
+  color: var(--ash);
+  line-height: 1.75;
+  margin-bottom: 0.5rem;
+  padding-left: 0.7rem;
+  border-left: 1px solid rgba(184,150,90,0.3);
+}
+.impl-point strong { color: var(--parchment); font-weight: 400; }
+
+/* FADE ANIMATION */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+.fade-up:nth-child(1) { animation-delay: 0.05s; }
+.fade-up:nth-child(2) { animation-delay: 0.12s; }
+.fade-up:nth-child(3) { animation-delay: 0.19s; }
+.fade-up:nth-child(4) { animation-delay: 0.26s; }
+.fade-up:nth-child(5) { animation-delay: 0.33s; }
+.fade-up:nth-child(6) { animation-delay: 0.4s; }
+.fade-up:nth-child(7) { animation-delay: 0.47s; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="wordmark">VERYLON</div>
+    <div class="header-sub">Competitor Intelligence System</div>
+  </div>
+  <div class="header-right">
+    <div class="live-indicator">
+      <span class="live-dot"></span>
+      AI-Powered Analysis
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <h1 class="hero-title">Competitor<br>Review <em>Intelligence</em></h1>
+      <p class="hero-claim">"See the life you've built." — VERYLON</p>
+    </div>
+    <div class="hero-right">
+      <p class="hero-desc">
+        Was sagen Kunden über deine Wettbewerber — und wie kannst du VERYLON dagegen positionieren? 
+        Die Analyse kategorisiert Feedback nach strategischer Relevanz für VERYLON's Positionierung: 
+        still, zeitlos, architektonisch — Vision · Endurance · Refinement · Longevity.
+      </p>
+      <div class="brand-pillars">
+        <span class="pillar-tag">Vision</span>
+        <span class="pillar-tag">Endurance</span>
+        <span class="pillar-tag">Refinement</span>
+        <span class="pillar-tag">Your Way</span>
+        <span class="pillar-tag">Longevity</span>
+        <span class="pillar-tag">Own Aesthetic</span>
+        <span class="pillar-tag">Now & Always</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls-section">
+    <div class="control-row">
+      <span class="control-label">Marken</span>
+      <button class="brand-btn active" data-brand="all">Alle</button>
+      <button class="brand-btn" data-brand="retrosuperfuture">Retrosuperfuture</button>
+      <button class="brand-btn" data-brand="eyepetizer">Eyepetizer</button>
+      <button class="brand-btn" data-brand="mykita">Mykita</button>
+      <button class="brand-btn" data-brand="messyweekend">Messy Weekend</button>
+      <button class="brand-btn" data-brand="aceandtate">Ace & Tate</button>
+      <button class="brand-btn" data-brand="custom">+ Eigene</button>
+    </div>
+    <div class="custom-row" id="customRow">
+      <input type="text" class="custom-input" id="customBrands" placeholder="Marken kommagetrennt, z.B.: Flatlist, Dick Moby, Chimi">
+      <input type="text" class="custom-input" id="customFocus" placeholder="Analyse-Fokus (optional)">
+    </div>
+    <div class="control-row">
+      <span class="control-label">Plattform</span>
+      <button class="platform-btn active" data-platform="all">Alle</button>
+      <button class="platform-btn" data-platform="Reddit">Reddit</button>
+      <button class="platform-btn" data-platform="Trustpilot">Trustpilot</button>
+      <button class="platform-btn" data-platform="Instagram">Instagram</button>
+      <button class="platform-btn" data-platform="Google Reviews">Google Reviews</button>
+      <button class="platform-btn" data-platform="Amazon">Amazon</button>
+      <button class="platform-btn" data-platform="Fashion Blogs">Fashion Blogs</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stat-box">
+      <span class="stat-n" id="statBrands">5</span>
+      <span class="stat-l">Marken analysiert</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-n" id="statReviews">—</span>
+      <span class="stat-l">Reviews verarbeitet</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-n" id="statCats">—</span>
+      <span class="stat-l">Kategorien identifiziert</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-n" id="statOpps">—</span>
+      <span class="stat-l">VERYLON-Opportunities</span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <button class="cta-btn" id="analyzeBtn" onclick="runAnalysis()">
+    ↳ Competitor-Feedback analysieren & für VERYLON gewichten
+  </button>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label" id="progressLabel">↳ Initialisiere Analyse...</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results"></div>
+
+</main>
+
+<script>
+const BRAND_MAP = {
+  all: ["Retrosuperfuture", "Eyepetizer", "Mykita", "Messy Weekend", "Ace & Tate"],
+  retrosuperfuture: ["Retrosuperfuture"],
+  eyepetizer: ["Eyepetizer"],
+  mykita: ["Mykita"],
+  messyweekend: ["Messy Weekend"],
+  aceandtate: ["Ace & Tate"],
+};
+
+let activeBrand = "all";
+let activePlatform = "all";
+
+document.querySelectorAll('.brand-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeBrand = btn.dataset.brand;
+    document.getElementById('customRow').classList.toggle('visible', activeBrand === 'custom');
+    const count = activeBrand === 'custom' ? 1 : (BRAND_MAP[activeBrand]?.length || 5);
+    document.getElementById('statBrands').textContent = count;
+  });
+});
+
+document.querySelectorAll('.platform-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activePlatform = btn.dataset.platform;
+  });
+});
+
+function setProgress(pct, label) {
+  const wrap = document.getElementById('progressWrap');
+  const fill = document.getElementById('progressFill');
+  const lbl = document.getElementById('progressLabel');
+  wrap.classList.toggle('visible', pct > 0 && pct < 100);
+  fill.style.width = pct + '%';
+  if (label) lbl.textContent = label;
+}
+
+async function runAnalysis() {
+  const btn = document.getElementById('analyzeBtn');
+  const errEl = document.getElementById('errorMsg');
+  const results = document.getElementById('results');
+
+  errEl.style.display = 'none';
+  results.classList.remove('visible');
+  btn.disabled = true;
+
+  let brands;
+  if (activeBrand === 'custom') {
+    const raw = document.getElementById('customBrands').value.trim();
+    brands = raw ? raw.split(',').map(s => s.trim()).filter(Boolean) : ["Flatlist", "Dick Moby"];
+  } else {
+    brands = BRAND_MAP[activeBrand] || BRAND_MAP.all;
+  }
+
+  const focus = document.getElementById('customFocus')?.value?.trim() || '';
+  const platform = activePlatform === 'all'
+    ? 'allen relevanten Plattformen (Reddit, Trustpilot, Instagram, Google Reviews, Amazon, Fashion Blogs)'
+    : activePlatform;
+
+  const SYSTEM = `Du bist ein Senior Brand Strategist und Consumer Insights Analyst, spezialisiert auf Premium-Eyewear und DTC-Modemarken in Europa.
+
+Du analysierst Kundenfeedback von Konkurrenzmarken im Premium-Sonnenbrillen-Segment für VERYLON.
+
+VERYLON BRAND CONTEXT:
+- Name: VERYLON (Kunstwort, global trademark-frei, kein EU-Sprachkonflikt)
+- Claim: "See the life you've built."
+- Positionierung: Eyewear an der Schnittstelle von zeitlosem Design und Augengesundheit/Longevity
+- Zielgruppe: 35–65 Jahre, modebewusst, selbstsicher, erklärungsfrei, DE → EU
+- Preispunkt: ~€200 mid-premium
+- Markenästhetik: Still, architektonisch, zeitlos (Referenz: Carlo Scarpa)
+- Differenzierung vs. Wettbewerb: VERYLON ist NICHT laut wie Retrosuperfuture, NICHT saisonal wie Eyepetizer — sondern zeitlos, ganzjährig, denkend
+- Brand Pillars: Vision (klares Sehen = Lebensqualität) · Endurance (zeitloses Design) · Refinement (ästhetische Präzision) · Your Way (selbstbewusste Identität) · Longevity (Augengesundheit) · Own Aesthetic (Stil als Ausdruck) · Now & Always (modern ohne vergänglich)
+
+Analysiere Kundenfeedback zu den Wettbewerbsmarken und antworte NUR mit einem validen JSON-Objekt. KEIN Markdown, KEINE Backticks, KEINE Erklärungen davor oder danach. Nur das JSON-Objekt beginend mit { und endend mit }.
+
+JSON-Struktur exakt so:
+{
+  "meta": {
+    "brands": ["..."],
+    "estimated_reviews": 1500,
+    "categories_found": 12,
+    "opportunities": 6,
+    "analysis_summary": "2-3 Sätze strategisches Summary"
+  },
+  "sentiment_by_brand": [
+    {
+      "brand": "...",
+      "positive_score": 72,
+      "negative_score": 28,
+      "nps_estimate": 35,
+      "top_praise": "kurze Formulierung",
+      "top_complaint": "kurze Formulierung"
+    }
+  ],
+  "categories": {
+    "positive": [
+      {
+        "theme": "Thema",
+        "weight": "HIGH",
+        "priority": "P1",
+        "insight": "Konkreter Insight 1-2 Sätze",
+        "brand": "Marke",
+        "platform": "Quelle",
+        "luma_relevance": "Relevanz für VERYLON's Positionierung"
+      }
+    ],
+    "negative": [
+      {
+        "theme": "Thema",
+        "weight": "HIGH",
+        "priority": "P1",
+        "insight": "Konkreter Insight 1-2 Sätze",
+        "brand": "Marke",
+        "platform": "Quelle",
+        "luma_opportunity": "Wie VERYLON diesen Pain-Point löst"
+      }
+    ]
+  },
+  "priority_matrix": {
+    "act_now": ["Insight 1", "Insight 2", "Insight 3"],
+    "watch_closely": ["Insight 1", "Insight 2", "Insight 3"],
+    "consider_later": ["Insight 1", "Insight 2"],
+    "low_priority": ["Insight 1", "Insight 2"]
+  },
+  "opportunities": [
+    {
+      "title": "Opportunity-Name",
+      "tier": 1,
+      "description": "Was fehlt beim Wettbewerb, was VERYLON anbieten kann",
+      "signal": "Konkretes Feedback-Signal als Beweis"
+    }
+  ],
+  "representative_quotes": [
+    {
+      "text": "Realistischer Kundenkommentar-Stil",
+      "sentiment": "pos",
+      "brand": "...",
+      "platform": "...",
+      "strategic_weight": "HIGH"
+    }
+  ],
+  "verylon_implications": {
+    "positioning": ["Implikation 1", "Implikation 2", "Implikation 3"],
+    "product": ["Implikation 1", "Implikation 2", "Implikation 3"],
+    "communication": ["Implikation 1", "Implikation 2", "Implikation 3"]
+  }
+}`;
+
+  const USER = `Analysiere Kundenfeedback zu folgenden Sonnenbrillenmarken auf ${platform}:
+Marken: ${brands.join(', ')}
+${focus ? `Fokus: ${focus}` : ''}
+
+Liefere eine tiefe, realistische Analyse basierend auf bekannten Mustern im europäischen Premium-Sonnenbrillen-Segment (Reddit r/sunglasses, r/malefashionadvice, Trustpilot, Instagram-Kommentare, Google Reviews). Sei konkret und spezifisch. Gewichte nach strategischer Relevanz für VERYLON — eine neue Premium-DTC-Sonnenbrillenmarke für 35–65-Jährige mit "See the life you've built." als Claim.
+
+Mindestens: 6 positive Kategorien, 6 negative Kategorien, 6 Opportunities, 8 repräsentative Quotes. Alle Texte auf Deutsch. Antworte NUR mit dem JSON-Objekt, ohne irgendwelche Einleitungen.`;
+
+  setProgress(15, '↳ Verbinde mit AI-Analyse...');
+
+  try {
+    setProgress(35, '↳ Verarbeite Plattform-Feedback...');
+
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        system: SYSTEM,
+        messages: [{ role: "user", content: USER }]
+      })
+    });
+
+    setProgress(65, '↳ Kategorisiere & gewichte Insights...');
+
+    if (!resp.ok) {
+      const e = await resp.json().catch(() => ({}));
+      throw new Error(e?.error?.message || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    setProgress(85, '↳ Erstelle strategische Auswertung...');
+
+    // Extract text from content blocks
+    let raw = '';
+    if (Array.isArray(data.content)) {
+      data.content.forEach(block => {
+        if (block.type === 'text' && block.text) raw += block.text;
+      });
+    }
+
+    // Strip any markdown fences
+    raw = raw.trim();
+    const fenceStart = raw.indexOf('```');
+    if (fenceStart !== -1) {
+      const fenceEnd = raw.lastIndexOf('```');
+      if (fenceEnd > fenceStart) {
+        raw = raw.substring(fenceStart, fenceEnd + 3);
+        raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+      }
+    }
+
+    // Find the JSON object boundaries
+    const jsonStart = raw.indexOf('{');
+    const jsonEnd = raw.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) throw new Error('Kein JSON in der API-Antwort gefunden.');
+    raw = raw.substring(jsonStart, jsonEnd + 1);
+
+    const parsed = JSON.parse(raw);
+    setProgress(100, '');
+    setTimeout(() => setProgress(0, ''), 400);
+
+    // Update stats
+    document.getElementById('statBrands').textContent = parsed.meta?.brands?.length || brands.length;
+    document.getElementById('statReviews').textContent = (parsed.meta?.estimated_reviews || 0).toLocaleString('de-DE');
+    document.getElementById('statCats').textContent = parsed.meta?.categories_found || 0;
+    document.getElementById('statOpps').textContent = parsed.meta?.opportunities || 0;
+
+    renderResults(parsed);
+    btn.disabled = false;
+
+  } catch (err) {
+    setProgress(0, '');
+    errEl.style.display = 'block';
+    errEl.textContent = '↳ Analyse fehlgeschlagen: ' + (err.message || 'Unbekannter Fehler. Bitte erneut versuchen.');
+    btn.disabled = false;
+  }
+}
+
+function wc(w) { return { HIGH: 'HIGH', MEDIUM: 'MEDIUM', LOW: 'LOW' }[w] || 'MEDIUM'; }
+function pc(p) { return { P1: 'p1', P2: 'p2', P3: 'p3' }[p] || 'p3'; }
+
+function renderResults(d) {
+  const el = document.getElementById('results');
+
+  const sentimentRows = (d.sentiment_by_brand || []).map(b => `
+    <div class="st-row">
+      <div class="st-cell"><span class="brand-name-cell">${b.brand}</span></div>
+      <div class="st-cell">
+        <div class="bar-row">
+          <div class="bar-track pos-track"><div class="bar-fill pos" style="width:${b.positive_score}%"></div></div>
+          <span class="bar-pct">${b.positive_score}%</span>
+        </div>
+        <div class="bar-row">
+          <div class="bar-track neg-track"><div class="bar-fill neg" style="width:${b.negative_score}%"></div></div>
+          <span class="bar-pct">${b.negative_score}%</span>
+        </div>
+      </div>
+      <div class="st-cell">
+        <div class="praise-complaint">
+          <div class="praise">+ ${b.top_praise}</div>
+          <div class="complaint">− ${b.top_complaint}</div>
+        </div>
+      </div>
+      <div class="st-cell"><span class="nps-num">${b.nps_estimate > 0 ? '+' : ''}${b.nps_estimate}</span></div>
+    </div>
+  `).join('');
+
+  const posCats = (d.categories?.positive || []).map(c => `
+    <div class="cat-item">
+      <div class="cat-dot ${pc(c.priority)}"></div>
+      <div class="cat-body">
+        <div class="cat-theme">${c.theme}</div>
+        <div class="cat-insight">${c.insight}</div>
+        <div class="cat-verylon pos-verylon">→ VERYLON: ${c.luma_relevance}</div>
+      </div>
+      <div class="cat-right">
+        <div class="weight-pill ${wc(c.weight)}">${c.weight}</div>
+        <div class="cat-platform">${c.platform}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const negCats = (d.categories?.negative || []).map(c => `
+    <div class="cat-item">
+      <div class="cat-dot ${pc(c.priority)}"></div>
+      <div class="cat-body">
+        <div class="cat-theme">${c.theme}</div>
+        <div class="cat-insight">${c.insight}</div>
+        <div class="cat-verylon neg-verylon">→ VERYLON-Chance: ${c.luma_opportunity}</div>
+      </div>
+      <div class="cat-right">
+        <div class="weight-pill ${wc(c.weight)}">${c.weight}</div>
+        <div class="cat-platform">${c.platform}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const matrixItems = (items, cls) => (items || []).map(i => `<div class="matrix-item ${cls}">${i}</div>`).join('');
+
+  const opps = (d.opportunities || []).map((o, i) => `
+    <div class="opp-card tier-${o.tier}">
+      <div class="opp-stripe"></div>
+      <div class="opp-n">${String(i+1).padStart(2,'0')}</div>
+      <div class="opp-title">${o.title}</div>
+      <div class="opp-desc">${o.description}</div>
+      <div class="opp-signal">"${o.signal}"</div>
+    </div>
+  `).join('');
+
+  const quotes = (d.representative_quotes || []).map(q => `
+    <div class="quote-item">
+      <div class="quote-text ${q.sentiment}">"${q.text}"</div>
+      <div class="quote-meta">
+        <div class="quote-brand">${q.brand}</div>
+        <div class="quote-platform">${q.platform}</div>
+        <div class="quote-weight">${q.strategic_weight}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const implCols = (d.verylon_implications || d.luma_implications || {});
+  const mkImpl = (arr) => (arr || []).map(p => `<div class="impl-point">${p}</div>`).join('');
+
+  el.innerHTML = `
+    <div class="fade-up">
+      <div class="strategic-box">${d.meta?.analysis_summary || ''}</div>
+    </div>
+
+    <div class="fade-up">
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <span class="section-divider-title">Sentiment nach Marke</span>
+        <span class="section-divider-count">${d.sentiment_by_brand?.length || 0} Marken · NPS-Schätzung</span>
+        <div class="section-divider-line"></div>
+      </div>
+      <div class="sentiment-table">
+        <div class="st-header">
+          <div class="st-cell st-head-cell">Marke</div>
+          <div class="st-cell st-head-cell">Pos / Neg</div>
+          <div class="st-cell st-head-cell">Top Praise · Top Complaint</div>
+          <div class="st-cell st-head-cell">NPS est.</div>
+        </div>
+        ${sentimentRows}
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <span class="section-divider-title">Kategorisiertes Feedback</span>
+        <span class="section-divider-count">gewichtet nach VERYLON-Relevanz</span>
+        <div class="section-divider-line"></div>
+      </div>
+      <div class="cat-grid">
+        <div class="cat-col">
+          <div class="cat-col-head">
+            <span class="cat-col-title pos">↑ Was Kunden lieben</span>
+            <span class="cat-count">${d.categories?.positive?.length || 0} Themen</span>
+          </div>
+          ${posCats}
+        </div>
+        <div class="cat-col">
+          <div class="cat-col-head">
+            <span class="cat-col-title neg">↓ Pain Points & Kritik</span>
+            <span class="cat-count">${d.categories?.negative?.length || 0} Themen</span>
+          </div>
+          ${negCats}
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <span class="section-divider-title">Strategische Prioritäts-Matrix</span>
+        <span class="section-divider-count">Wichtigkeit × Dringlichkeit</span>
+        <div class="section-divider-line"></div>
+      </div>
+      <div class="matrix-outer">
+        <div class="matrix-layout">
+          <div class="matrix-y-label">Niedrig ← Wichtigkeit → Hoch</div>
+          <div class="matrix-inner-wrap">
+            <div class="matrix-grid">
+              <div class="matrix-cell">
+                <div class="matrix-cell-head">
+                  <span class="matrix-cell-label">Hoch Wichtig · Jetzt</span>
+                  <span class="matrix-tag act">ACT NOW</span>
+                </div>
+                ${matrixItems(d.priority_matrix?.act_now, 'act')}
+              </div>
+              <div class="matrix-cell">
+                <div class="matrix-cell-head">
+                  <span class="matrix-cell-label">Niedrig Wichtig · Jetzt</span>
+                  <span class="matrix-tag watch">WATCH</span>
+                </div>
+                ${matrixItems(d.priority_matrix?.watch_closely, 'watch')}
+              </div>
+              <div class="matrix-cell">
+                <div class="matrix-cell-head">
+                  <span class="matrix-cell-label">Hoch Wichtig · Später</span>
+                  <span class="matrix-tag consider">CONSIDER</span>
+                </div>
+                ${matrixItems(d.priority_matrix?.consider_later, 'consider')}
+              </div>
+              <div class="matrix-cell">
+                <div class="matrix-cell-head">
+                  <span class="matrix-cell-label">Niedrig · Deprioritisieren</span>
+                  <span class="matrix-tag skip">SKIP</span>
+                </div>
+                ${matrixItems(d.priority_matrix?.low_priority, 'skip')}
+              </div>
+            </div>
+            <div class="matrix-x-label">Niedrig ← Dringlichkeit → Hoch</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <span class="section-divider-title">VERYLON Positioning Opportunities</span>
+        <span class="section-divider-count">aus Wettbewerbs-Gaps abgeleitet</span>
+        <div class="section-divider-line"></div>
+      </div>
+      <div class="opp-grid">${opps}</div>
+    </div>
+
+    <div class="fade-up">
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <span class="section-divider-title">Repräsentative Kundenaussagen</span>
+        <span class="section-divider-count">reale Sprachmuster von Zielkunden</span>
+        <div class="section-divider-line"></div>
+      </div>
+      <div class="quotes-list">${quotes}</div>
+    </div>
+
+    <div class="fade-up">
+      <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <span class="section-divider-title">Strategische Implikationen</span>
+        <span class="section-divider-count">für VERYLON's Markteinritt</span>
+        <div class="section-divider-line"></div>
+      </div>
+      <div class="impl-block">
+        <div class="impl-header">— Strategische Implikationen für VERYLON</div>
+        <div class="impl-cols">
+          <div>
+            <div class="impl-col-title">Positionierung</div>
+            ${mkImpl(implCols.positioning)}
+          </div>
+          <div>
+            <div class="impl-col-title">Produkt</div>
+            ${mkImpl(implCols.product)}
+          </div>
+          <div>
+            <div class="impl-col-title">Kommunikation</div>
+            ${mkImpl(implCols.communication)}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  el.classList.add('visible');
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>
