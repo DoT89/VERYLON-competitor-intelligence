@@ -4,27 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VERYLON — Competitor Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
-
 :root {
-  --ink: #141210;
-  --parchment: #F2EDE4;
-  --warm-white: #FAF7F2;
-  --gold: #B8965A;
-  --gold-pale: #D4B483;
-  --gold-deep: #8A6B38;
-  --ash: #9A8E82;
-  --rust: #B55A3A;
-  --sage: #6E8A72;
-  --surface: #1E1A16;
-  --surface2: #252018;
-  --border: rgba(184,150,90,0.2);
-  --border-soft: rgba(184,150,90,0.1);
+  --ink:         #141210;
+  --parchment:   #F2EDE4;
+  --warm-white:  #FAF7F2;
+  --gold:        #B8965A;
+  --gold-pale:   #D4B483;
+  --ash:         #9A8E82;
+  --rust:        #B55A3A;
+  --sage:        #6E8A72;
+  --s2:          #1E1A16;
+  --border:      rgba(184,150,90,.20);
+  --border-s:    rgba(184,150,90,.10);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
@@ -32,685 +29,598 @@ body {
   background: var(--ink);
   color: var(--parchment);
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
-/* grain overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-}
-
-/* HEADER */
+/* ── HEADER ── */
 header {
-  padding: 1.75rem 3rem;
+  padding: 1.5rem 2.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(20,18,16,0.92);
-  backdrop-filter: blur(20px);
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(20,18,16,.94);
+  backdrop-filter: blur(16px);
 }
-
 .wordmark {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 300;
-  font-size: 1.5rem;
-  letter-spacing: 0.5em;
+  font-size: 1.45rem;
+  letter-spacing: .45em;
   color: var(--gold);
   text-transform: uppercase;
 }
 .header-sub {
   font-family: 'Syne', sans-serif;
-  font-size: 0.55rem;
-  letter-spacing: 0.25em;
+  font-size: .55rem;
+  letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--ash);
-  margin-top: 0.2rem;
+  margin-top: 2px;
 }
-.header-right { display: flex; align-items: center; gap: 2rem; }
-.live-indicator {
-  display: flex; align-items: center; gap: 0.5rem;
-  font-size: 0.6rem; color: var(--ash); letter-spacing: 0.08em;
+.live {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .6rem; color: var(--ash); letter-spacing: .08em;
 }
 .live-dot {
-  width: 5px; height: 5px; border-radius: 50%;
+  width: 5px; height: 5px;
+  border-radius: 50%;
   background: var(--sage);
   animation: breathe 3s ease-in-out infinite;
 }
-@keyframes breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+@keyframes breathe { 0%,100%{opacity:1} 50%{opacity:.35} }
 
-/* MAIN */
-main { padding: 3rem 3rem 5rem; max-width: 1380px; margin: 0 auto; position: relative; z-index: 1; }
+/* ── MAIN ── */
+main { padding: 2.5rem 2.5rem 5rem; max-width: 1320px; margin: 0 auto; }
 
-/* HERO */
+/* ── HERO ── */
 .hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 3rem;
   align-items: end;
-  margin-bottom: 3rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-s);
 }
-.hero-title {
+.hero h1 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 3.2rem;
   font-weight: 300;
+  font-size: 2.8rem;
   line-height: 1.05;
   color: var(--warm-white);
 }
-.hero-title em { font-style: italic; color: var(--gold-pale); }
+.hero h1 em { font-style: italic; color: var(--gold-pale); }
 .hero-claim {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
   font-style: italic;
+  font-size: .85rem;
   color: var(--ash);
-  margin-top: 1rem;
-  letter-spacing: 0.05em;
+  margin-top: .75rem;
+  letter-spacing: .05em;
 }
-.hero-right { }
 .hero-desc {
-  font-size: 0.68rem;
+  font-size: .68rem;
   color: var(--ash);
   line-height: 1.9;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
 }
-.brand-pillars {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-.pillar-tag {
+.pillars { display: flex; flex-wrap: wrap; gap: 6px; }
+.pillar {
   font-family: 'Syne', sans-serif;
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  padding: 0.25rem 0.7rem;
+  padding: 3px 9px;
   border: 1px solid var(--border);
   color: var(--gold-pale);
 }
 
-/* CONTROLS */
-.controls-section { margin-bottom: 2rem; }
-
-.control-row {
+/* ── CONTROLS ── */
+.controls { margin-bottom: 1.5rem; }
+.ctrl-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  gap: 8px;
   flex-wrap: wrap;
+  margin-bottom: 8px;
 }
-.control-label {
+.ctrl-label {
   font-family: 'Syne', sans-serif;
-  font-size: 0.55rem;
+  font-size: .55rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--ash);
-  min-width: 90px;
+  min-width: 80px;
 }
-
 .brand-btn {
   font-family: 'Syne', sans-serif;
-  font-size: 0.6rem;
+  font-size: .6rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  padding: 0.45rem 1rem;
-  border: 1px solid rgba(184,150,90,0.25);
+  padding: 5px 12px;
+  border: 1px solid rgba(184,150,90,.25);
   background: transparent;
   color: var(--ash);
   cursor: pointer;
-  transition: all 0.18s;
+  transition: all .15s;
 }
 .brand-btn:hover { border-color: var(--gold); color: var(--gold-pale); }
 .brand-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); }
 
-.platform-btn {
+.plat-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  padding: 0.3rem 0.75rem;
-  border: 1px solid rgba(154,142,130,0.2);
+  font-size: .58rem;
+  padding: 3px 10px;
+  border: 1px solid rgba(154,142,130,.2);
   border-radius: 20px;
   background: transparent;
   color: var(--ash);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all .15s;
 }
-.platform-btn:hover { border-color: var(--gold); color: var(--gold-pale); }
-.platform-btn.active { background: rgba(184,150,90,0.1); border-color: var(--gold); color: var(--gold-pale); }
+.plat-btn:hover { border-color: var(--gold); color: var(--gold-pale); }
+.plat-btn.active { background: rgba(184,150,90,.1); border-color: var(--gold); color: var(--gold-pale); }
 
 .custom-row {
   display: none;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 .custom-row.visible { display: flex; }
-.custom-input {
+input.custom {
   flex: 1;
   background: transparent;
   border: 1px solid var(--border);
-  padding: 0.6rem 0.9rem;
+  padding: 8px 12px;
   color: var(--parchment);
   font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
+  font-size: .68rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color .2s;
 }
-.custom-input:focus { border-color: var(--gold); }
-.custom-input::placeholder { color: rgba(154,142,130,0.4); }
+input.custom:focus { border-color: var(--gold); }
+input.custom::placeholder { color: rgba(154,142,130,.4); }
 
-/* STATS */
-.stats-strip {
+/* ── STATS ── */
+.stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4,1fr);
   border: 1px solid var(--border);
-  margin-bottom: 1.5rem;
-  background: var(--border-soft);
   gap: 1px;
+  background: var(--border-s);
+  margin-bottom: 1.25rem;
 }
-.stat-box {
+.stat {
   background: var(--ink);
   padding: 1rem 1.25rem;
 }
 .stat-n {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.9rem;
   font-weight: 300;
+  font-size: 1.9rem;
   color: var(--gold);
-  display: block;
   line-height: 1;
+  display: block;
 }
 .stat-l {
-  font-size: 0.56rem;
+  font-size: .55rem;
   color: var(--ash);
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
   text-transform: uppercase;
-  margin-top: 0.3rem;
+  margin-top: 4px;
 }
 
-/* CTA */
-.cta-btn {
+/* ── CTA ── */
+.cta {
   width: 100%;
-  padding: 1.1rem 2rem;
+  padding: 1rem 2rem;
   background: transparent;
   border: 1px solid var(--gold);
   color: var(--gold-pale);
   font-family: 'Syne', sans-serif;
   font-weight: 700;
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
+  font-size: .7rem;
+  letter-spacing: .22em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s;
+  transition: all .25s;
+  margin-bottom: .5rem;
   position: relative;
   overflow: hidden;
-  margin-bottom: 1.5rem;
 }
-.cta-btn::after {
+.cta::after {
   content: '';
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background: var(--gold);
   transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  transition: transform .3s ease;
   z-index: -1;
 }
-.cta-btn:hover { color: var(--ink); }
-.cta-btn:hover::after { transform: translateX(0); }
-.cta-btn:disabled { border-color: var(--ash); color: var(--ash); cursor: not-allowed; }
-.cta-btn:disabled::after { display: none; }
+.cta:hover:not(:disabled) { color: var(--ink); }
+.cta:hover:not(:disabled)::after { transform: translateX(0); }
+.cta:disabled { border-color: var(--ash); color: var(--ash); cursor: not-allowed; }
 
-/* PROGRESS */
-.progress-wrap { margin-bottom: 2rem; display: none; }
-.progress-wrap.visible { display: block; }
-.progress-label {
-  font-size: 0.6rem;
-  color: var(--gold);
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-  font-family: 'DM Mono', monospace;
-}
-.progress-track {
-  height: 1px;
-  background: rgba(184,150,90,0.15);
-  position: relative;
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  background: var(--gold);
-  width: 0;
-  transition: width 0.5s ease;
+.cta-note {
+  font-size: .58rem;
+  color: rgba(154,142,130,.45);
+  letter-spacing: .08em;
+  text-align: center;
+  margin-bottom: 1.25rem;
 }
 
-/* ERROR */
-.error-msg {
+/* ── PROGRESS ── */
+.progress { display: none; margin-bottom: 1.5rem; }
+.progress.visible { display: block; }
+.progress-label { font-size: .6rem; color: var(--gold); letter-spacing: .1em; margin-bottom: 6px; }
+.progress-track { height: 1px; background: rgba(184,150,90,.15); overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gold); width: 0; transition: width .5s ease; }
+
+/* ── ERROR ── */
+.error-box {
   display: none;
-  border: 1px solid rgba(181,90,58,0.4);
+  border: 1px solid rgba(181,90,58,.4);
   padding: 1rem 1.25rem;
   color: var(--rust);
-  font-size: 0.68rem;
+  font-size: .68rem;
   margin-bottom: 1.5rem;
-  line-height: 1.6;
+  line-height: 1.65;
+  word-break: break-word;
 }
 
-/* RESULTS */
-.results { display: none; }
-.results.visible { display: block; }
+/* ── RESULTS ── */
+#results { display: none; }
+#results.visible { display: block; }
 
-/* DIVIDER */
-.section-divider {
+/* ── SECTION DIVIDER ── */
+.divider {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin: 2.5rem 0 1.5rem;
+  gap: 16px;
+  margin: 2.25rem 0 1.25rem;
 }
-.section-divider-line { flex: 1; height: 1px; background: var(--border-soft); }
-.section-divider-title {
+.div-line { flex: 1; height: 1px; background: var(--border-s); }
+.div-title {
   font-family: 'Syne', sans-serif;
-  font-size: 0.58rem;
+  font-size: .58rem;
   font-weight: 700;
-  letter-spacing: 0.25em;
+  letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--ash);
   white-space: nowrap;
 }
-.section-divider-count {
-  font-size: 0.56rem;
-  color: rgba(154,142,130,0.5);
-  letter-spacing: 0.05em;
-}
+.div-count { font-size: .56rem; color: rgba(154,142,130,.5); white-space: nowrap; }
 
-/* STRATEGIC SUMMARY */
-.strategic-box {
+/* ── SUMMARY ── */
+.summary {
   border-left: 2px solid var(--gold);
   padding: 1.25rem 1.75rem;
-  background: rgba(184,150,90,0.04);
-  margin-bottom: 2rem;
-  font-size: 0.74rem;
+  background: rgba(184,150,90,.04);
+  margin-bottom: 1.75rem;
+  font-size: .74rem;
   line-height: 1.85;
   color: var(--parchment);
 }
-.strategic-box strong { color: var(--gold-pale); font-weight: 400; }
 
-/* SENTIMENT TABLE */
-.sentiment-table {
-  border: 1px solid var(--border);
-  overflow: hidden;
-  margin-bottom: 2rem;
-}
-.st-header, .st-row {
+/* ── SENTIMENT TABLE ── */
+.sent-table { border: 1px solid var(--border); margin-bottom: 1.75rem; }
+.sent-head, .sent-row {
   display: grid;
-  grid-template-columns: 160px 1fr 1fr 90px;
-  border-bottom: 1px solid var(--border-soft);
+  grid-template-columns: 150px 1fr 1fr 80px;
+  border-bottom: 1px solid var(--border-s);
 }
-.st-row:last-child { border-bottom: none; }
-.st-header { background: rgba(184,150,90,0.05); }
-.st-cell {
-  padding: 0.8rem 1rem;
-  border-right: 1px solid var(--border-soft);
-  font-size: 0.63rem;
+.sent-row:last-child { border-bottom: none; }
+.sent-head { background: rgba(184,150,90,.05); }
+.sc {
+  padding: .75rem 1rem;
+  font-size: .62rem;
+  border-right: 1px solid var(--border-s);
 }
-.st-cell:last-child { border-right: none; }
-.st-head-cell {
+.sc:last-child { border-right: none; }
+.sc.hd {
   font-family: 'Syne', sans-serif;
-  font-size: 0.54rem;
+  font-size: .54rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--ash);
 }
-.brand-name-cell {
+.brand-cell {
   font-family: 'Syne', sans-serif;
   font-weight: 700;
-  font-size: 0.7rem;
+  font-size: .7rem;
   color: var(--warm-white);
+  display: flex;
+  align-items: center;
 }
-.bar-group { }
-.bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 4px; }
-.bar-track {
-  flex: 1; height: 4px;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.bar-track.pos-track { background: rgba(110,138,114,0.2); }
-.bar-track.neg-track { background: rgba(181,90,58,0.15); }
-.bar-fill { height: 100%; border-radius: 2px; }
+.bar-wrap { display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.bar-row { display: flex; align-items: center; gap: 8px; }
+.bar-track { flex: 1; height: 4px; border-radius: 2px; overflow: hidden; }
+.bar-track.pos { background: rgba(110,138,114,.2); }
+.bar-track.neg { background: rgba(181,90,58,.15); }
+.bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
 .bar-fill.pos { background: var(--sage); }
 .bar-fill.neg { background: var(--rust); }
-.bar-pct { font-size: 0.56rem; color: var(--ash); min-width: 28px; }
-.praise-complaint { font-size: 0.61rem; line-height: 1.6; }
-.praise { color: rgba(110,138,114,0.85); }
-.complaint { color: rgba(181,90,58,0.85); margin-top: 3px; }
+.bar-pct { font-size: .56rem; color: var(--ash); min-width: 28px; }
+.pc-wrap { font-size: .62rem; line-height: 1.65; display: flex; flex-direction: column; justify-content: center; }
+.pc-praise { color: rgba(110,138,114,.85); }
+.pc-comp { color: rgba(181,90,58,.8); margin-top: 3px; }
+.nps-cell { display: flex; align-items: center; }
 .nps-num {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
   font-weight: 300;
+  font-size: 1.5rem;
   color: var(--gold);
 }
 
-/* CATEGORY GRID */
+/* ── CATEGORY GRID ── */
 .cat-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
-  background: var(--border-soft);
+  background: var(--border-s);
   border: 1px solid var(--border);
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 .cat-col { background: var(--ink); }
 .cat-col-head {
-  padding: 0.75rem 1.1rem;
-  border-bottom: 1px solid var(--border-soft);
+  padding: .7rem 1rem;
+  border-bottom: 1px solid var(--border-s);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .cat-col-title {
   font-family: 'Syne', sans-serif;
-  font-size: 0.6rem;
+  font-size: .6rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: .1em;
   text-transform: uppercase;
 }
 .cat-col-title.pos { color: var(--sage); }
 .cat-col-title.neg { color: var(--rust); }
-.cat-count { font-size: 0.56rem; color: var(--ash); }
+.cat-count { font-size: .56rem; color: var(--ash); }
 
 .cat-item {
-  padding: 0.8rem 1.1rem;
-  border-bottom: 1px solid var(--border-soft);
+  padding: .8rem 1rem;
+  border-bottom: 1px solid var(--border-s);
   display: grid;
-  grid-template-columns: 6px 1fr auto;
-  gap: 0.7rem;
+  grid-template-columns: 8px 1fr auto;
+  gap: 10px;
   align-items: start;
-  transition: background 0.12s;
+  transition: background .12s;
 }
-.cat-item:hover { background: rgba(184,150,90,0.03); }
 .cat-item:last-child { border-bottom: none; }
-.cat-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.cat-item:hover { background: rgba(184,150,90,.03); }
+.cat-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
 .cat-dot.p1 { background: var(--gold); }
 .cat-dot.p2 { background: var(--sage); }
 .cat-dot.p3 { background: var(--ash); }
-.cat-body { }
 .cat-theme {
   font-family: 'Syne', sans-serif;
-  font-size: 0.6rem;
+  font-size: .6rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--warm-white);
-  margin-bottom: 0.2rem;
+  margin-bottom: 3px;
 }
-.cat-insight { font-size: 0.65rem; line-height: 1.6; color: var(--ash); }
-.cat-verylon { font-size: 0.58rem; margin-top: 0.3rem; }
-.cat-verylon.pos-verylon { color: rgba(110,138,114,0.8); }
-.cat-verylon.neg-verylon { color: rgba(181,90,58,0.8); }
-.cat-right { text-align: right; }
-.weight-pill {
+.cat-insight { font-size: .65rem; line-height: 1.65; color: var(--ash); }
+.cat-verylon { font-size: .58rem; margin-top: 4px; }
+.cat-verylon.pos { color: rgba(110,138,114,.8); }
+.cat-verylon.neg { color: rgba(181,90,58,.8); }
+.cat-right { text-align: right; flex-shrink: 0; }
+.weight {
+  display: inline-block;
+  padding: 2px 7px;
   font-family: 'Syne', sans-serif;
-  font-size: 0.52rem;
+  font-size: .5rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  padding: 0.15rem 0.5rem;
 }
-.weight-pill.HIGH { background: rgba(184,150,90,0.15); color: var(--gold-pale); }
-.weight-pill.MEDIUM { background: rgba(154,142,130,0.12); color: var(--ash); }
-.weight-pill.LOW { background: rgba(30,26,22,0.8); color: rgba(154,142,130,0.5); }
-.cat-platform { font-size: 0.54rem; color: rgba(154,142,130,0.5); margin-top: 0.3rem; }
+.weight.HIGH { background: rgba(184,150,90,.14); color: var(--gold-pale); }
+.weight.MEDIUM { background: rgba(154,142,130,.1); color: var(--ash); }
+.weight.LOW { background: rgba(30,26,22,.8); color: rgba(154,142,130,.45); }
+.cat-platform { font-size: .52rem; color: rgba(154,142,130,.5); margin-top: 4px; }
 
-/* PRIORITY MATRIX */
-.matrix-outer { margin-bottom: 2rem; }
-.matrix-layout {
-  display: grid;
-  grid-template-columns: 20px 1fr;
-  gap: 0;
-  align-items: stretch;
-}
-.matrix-y-label {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  font-family: 'Syne', sans-serif;
-  font-size: 0.52rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--ash);
-  text-align: center;
-}
-.matrix-inner-wrap { }
+/* ── MATRIX ── */
 .matrix-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 1px;
-  background: var(--border-soft);
+  background: var(--border-s);
   border: 1px solid var(--border);
-  min-height: 380px;
+  min-height: 340px;
+  margin-bottom: 1.75rem;
 }
-.matrix-cell {
-  background: var(--ink);
-  padding: 1.1rem;
-  overflow-y: auto;
-}
-.matrix-cell-head {
+.m-cell { background: var(--ink); padding: 1rem; overflow-y: auto; }
+.m-cell-head {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  align-items: center;
+  margin-bottom: 10px;
 }
-.matrix-cell-label {
+.m-label {
   font-family: 'Syne', sans-serif;
-  font-size: 0.54rem;
+  font-size: .54rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--ash);
 }
-.matrix-tag {
-  font-size: 0.5rem;
+.m-tag {
   font-family: 'Syne', sans-serif;
+  font-size: .5rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  padding: 0.15rem 0.5rem;
+  padding: 2px 8px;
 }
-.matrix-tag.act { background: rgba(184,150,90,0.18); color: var(--gold-pale); }
-.matrix-tag.watch { background: rgba(110,138,114,0.15); color: var(--sage); }
-.matrix-tag.consider { background: rgba(154,142,130,0.12); color: var(--ash); }
-.matrix-tag.skip { background: rgba(30,26,22,0.9); color: rgba(154,142,130,0.4); }
-.matrix-item {
-  font-size: 0.63rem;
+.m-tag.act   { background: rgba(184,150,90,.15); color: var(--gold-pale); }
+.m-tag.watch { background: rgba(110,138,114,.14); color: var(--sage); }
+.m-tag.cons  { background: rgba(154,142,130,.12); color: var(--ash); }
+.m-tag.skip  { background: rgba(30,26,22,.9); color: rgba(154,142,130,.4); }
+.m-item {
+  font-size: .63rem;
   line-height: 1.5;
-  color: var(--parchment);
-  padding: 0.4rem 0.6rem;
-  margin-bottom: 0.35rem;
+  padding: 5px 8px;
+  margin-bottom: 5px;
   border-left: 2px solid;
+  color: var(--parchment);
 }
-.matrix-item.act { border-color: var(--gold); background: rgba(184,150,90,0.04); }
-.matrix-item.watch { border-color: var(--sage); background: rgba(110,138,114,0.04); }
-.matrix-item.consider { border-color: var(--ash); background: rgba(154,142,130,0.03); }
-.matrix-item.skip { border-color: rgba(154,142,130,0.2); color: var(--ash); }
-.matrix-x-label {
-  text-align: center;
-  font-family: 'Syne', sans-serif;
-  font-size: 0.52rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--ash);
-  padding: 0.6rem 0;
-}
+.m-item.act   { border-color: var(--gold);  background: rgba(184,150,90,.04); }
+.m-item.watch { border-color: var(--sage);  background: rgba(110,138,114,.04); }
+.m-item.cons  { border-color: var(--ash);   background: rgba(154,142,130,.03); }
+.m-item.skip  { border-color: rgba(154,142,130,.2); color: var(--ash); }
 
-/* OPPORTUNITIES */
+/* ── OPPORTUNITIES ── */
 .opp-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border-soft);
+  grid-template-columns: repeat(3,1fr);
   border: 1px solid var(--border);
-  margin-bottom: 2rem;
+  border-right: none;
+  border-bottom: none;
+  margin-bottom: 1.75rem;
 }
 .opp-card {
   background: var(--ink);
   padding: 1.25rem;
   position: relative;
   overflow: hidden;
-  transition: background 0.15s;
+  border-right: 1px solid var(--border-s);
+  border-bottom: 1px solid var(--border-s);
+  transition: background .15s;
 }
-.opp-card:hover { background: var(--surface2); }
-.opp-stripe {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-}
-.tier-1 .opp-stripe { background: var(--gold); }
-.tier-2 .opp-stripe { background: var(--sage); }
-.tier-3 .opp-stripe { background: var(--ash); }
+.opp-card:hover { background: var(--s2); }
+.opp-stripe { position: absolute; top: 0; left: 0; right: 0; height: 2px; }
 .opp-n {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2.5rem;
-  font-weight: 300;
-  color: rgba(184,150,90,0.1);
   position: absolute;
-  top: 0.25rem;
-  right: 0.75rem;
+  top: 4px; right: 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  color: rgba(184,150,90,.08);
   line-height: 1;
 }
 .opp-title {
   font-family: 'Syne', sans-serif;
-  font-size: 0.65rem;
+  font-size: .64rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--warm-white);
-  margin-bottom: 0.5rem;
-  margin-top: 0.75rem;
+  margin-top: .75rem;
+  margin-bottom: 6px;
 }
-.opp-desc { font-size: 0.65rem; line-height: 1.7; color: var(--ash); margin-bottom: 0.75rem; }
+.opp-desc { font-size: .65rem; line-height: 1.7; color: var(--ash); margin-bottom: 10px; }
 .opp-signal {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 0.72rem;
+  font-size: .75rem;
   color: var(--gold-pale);
-  opacity: 0.75;
+  opacity: .8;
 }
 
-/* QUOTES */
-.quotes-list { border: 1px solid var(--border); margin-bottom: 2rem; }
+/* ── QUOTES ── */
+.quotes { border: 1px solid var(--border); margin-bottom: 1.75rem; }
 .quote-item {
-  padding: 1.1rem 1.25rem;
-  border-bottom: 1px solid var(--border-soft);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-s);
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 1.5rem;
+  gap: 1.25rem;
   align-items: start;
-  transition: background 0.12s;
+  transition: background .12s;
 }
-.quote-item:hover { background: rgba(184,150,90,0.02); }
 .quote-item:last-child { border-bottom: none; }
+.quote-item:hover { background: rgba(184,150,90,.02); }
 .quote-text {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: .95rem;
   line-height: 1.65;
 }
-.quote-text.pos { color: rgba(110,138,114,0.85); }
-.quote-text.neg { color: rgba(181,90,58,0.8); }
+.quote-text.pos { color: rgba(110,138,114,.85); }
+.quote-text.neg { color: rgba(181,90,58,.82); }
 .quote-meta { text-align: right; flex-shrink: 0; }
-.quote-brand {
+.q-brand {
   font-family: 'Syne', sans-serif;
-  font-size: 0.58rem;
+  font-size: .58rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--ash);
 }
-.quote-platform { font-size: 0.56rem; color: rgba(154,142,130,0.55); margin-top: 2px; }
-.quote-weight { font-size: 0.56rem; color: var(--gold-pale); margin-top: 4px; }
+.q-platform { font-size: .55rem; color: rgba(154,142,130,.55); margin-top: 2px; }
+.q-weight   { font-size: .55rem; color: var(--gold-pale); margin-top: 4px; }
 
-/* IMPLICATIONS */
-.impl-block {
+/* ── IMPLICATIONS ── */
+.impl {
   border: 1px solid var(--border);
-  padding: 2rem 2.25rem;
-  background: rgba(184,150,90,0.03);
-  margin-bottom: 2rem;
+  padding: 1.75rem 2rem;
+  background: rgba(184,150,90,.03);
+  margin-bottom: 1.5rem;
 }
-.impl-header {
+.impl-head {
   font-family: 'Syne', sans-serif;
-  font-size: 0.58rem;
+  font-size: .58rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-soft);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--border-s);
 }
-.impl-header::before {
-  content: 'VERYLON';
+.impl-head em {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-weight: 300;
-  letter-spacing: 0.35em;
-  font-size: 0.9rem;
+  letter-spacing: .35em;
+  font-size: .9rem;
   color: var(--gold-pale);
+  margin-right: 10px;
+  font-variant: normal;
 }
-.impl-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.impl-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
 .impl-col-title {
   font-family: 'Syne', sans-serif;
-  font-size: 0.58rem;
+  font-size: .58rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--warm-white);
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-s);
 }
 .impl-point {
-  font-size: 0.64rem;
+  font-size: .64rem;
   color: var(--ash);
   line-height: 1.75;
-  margin-bottom: 0.5rem;
-  padding-left: 0.7rem;
-  border-left: 1px solid rgba(184,150,90,0.3);
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(184,150,90,.28);
 }
-.impl-point strong { color: var(--parchment); font-weight: 400; }
 
-/* FADE ANIMATION */
+/* ── ANIMATIONS ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
 }
-.fade-up {
-  opacity: 0;
-  animation: fadeUp 0.6s ease forwards;
-}
-.fade-up:nth-child(1) { animation-delay: 0.05s; }
-.fade-up:nth-child(2) { animation-delay: 0.12s; }
-.fade-up:nth-child(3) { animation-delay: 0.19s; }
-.fade-up:nth-child(4) { animation-delay: 0.26s; }
-.fade-up:nth-child(5) { animation-delay: 0.33s; }
-.fade-up:nth-child(6) { animation-delay: 0.4s; }
-.fade-up:nth-child(7) { animation-delay: 0.47s; }
+.fade { animation: fadeUp .55s ease forwards; }
+.fade:nth-child(2) { animation-delay:.08s; }
+.fade:nth-child(3) { animation-delay:.16s; }
+.fade:nth-child(4) { animation-delay:.24s; }
+.fade:nth-child(5) { animation-delay:.32s; }
+.fade:nth-child(6) { animation-delay:.40s; }
+.fade:nth-child(7) { animation-delay:.48s; }
 
-/* scrollbar */
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-thumb { background: var(--border); }
 </style>
@@ -722,11 +632,9 @@ main { padding: 3rem 3rem 5rem; max-width: 1380px; margin: 0 auto; position: rel
     <div class="wordmark">VERYLON</div>
     <div class="header-sub">Competitor Intelligence System</div>
   </div>
-  <div class="header-right">
-    <div class="live-indicator">
-      <span class="live-dot"></span>
-      AI-Powered Analysis
-    </div>
+  <div class="live">
+    <div class="live-dot"></div>
+    AI-Powered · Synthetisierte Analyse
   </div>
 </header>
 
@@ -735,31 +643,30 @@ main { padding: 3rem 3rem 5rem; max-width: 1380px; margin: 0 auto; position: rel
   <!-- HERO -->
   <div class="hero">
     <div>
-      <h1 class="hero-title">Competitor<br>Review <em>Intelligence</em></h1>
+      <h1>Competitor<br><em>Review Intelligence</em></h1>
       <p class="hero-claim">"See the life you've built." — VERYLON</p>
     </div>
-    <div class="hero-right">
+    <div>
       <p class="hero-desc">
-        Was sagen Kunden über deine Wettbewerber — und wie kannst du VERYLON dagegen positionieren? 
-        Die Analyse kategorisiert Feedback nach strategischer Relevanz für VERYLON's Positionierung: 
-        still, zeitlos, architektonisch — Vision · Endurance · Refinement · Longevity.
+        Synthetisierte Marktanalyse basierend auf bekannten Feedback-Mustern zu Premium-Sonnenbrillenmarken —
+        kategorisiert und gewichtet nach strategischer Relevanz für VERYLON's Positionierung.
       </p>
-      <div class="brand-pillars">
-        <span class="pillar-tag">Vision</span>
-        <span class="pillar-tag">Endurance</span>
-        <span class="pillar-tag">Refinement</span>
-        <span class="pillar-tag">Your Way</span>
-        <span class="pillar-tag">Longevity</span>
-        <span class="pillar-tag">Own Aesthetic</span>
-        <span class="pillar-tag">Now & Always</span>
+      <div class="pillars">
+        <span class="pillar">Vision</span>
+        <span class="pillar">Endurance</span>
+        <span class="pillar">Refinement</span>
+        <span class="pillar">Your Way</span>
+        <span class="pillar">Longevity</span>
+        <span class="pillar">Own Aesthetic</span>
+        <span class="pillar">Now & Always</span>
       </div>
     </div>
   </div>
 
   <!-- CONTROLS -->
-  <div class="controls-section">
-    <div class="control-row">
-      <span class="control-label">Marken</span>
+  <div class="controls">
+    <div class="ctrl-row">
+      <span class="ctrl-label">Marken</span>
       <button class="brand-btn active" data-brand="all">Alle</button>
       <button class="brand-btn" data-brand="retrosuperfuture">Retrosuperfuture</button>
       <button class="brand-btn" data-brand="eyepetizer">Eyepetizer</button>
@@ -769,523 +676,379 @@ main { padding: 3rem 3rem 5rem; max-width: 1380px; margin: 0 auto; position: rel
       <button class="brand-btn" data-brand="custom">+ Eigene</button>
     </div>
     <div class="custom-row" id="customRow">
-      <input type="text" class="custom-input" id="customBrands" placeholder="Marken kommagetrennt, z.B.: Flatlist, Dick Moby, Chimi">
-      <input type="text" class="custom-input" id="customFocus" placeholder="Analyse-Fokus (optional)">
+      <input class="custom" id="customBrands" placeholder="Marken kommagetrennt: Flatlist, Dick Moby, Chimi...">
+      <input class="custom" id="customFocus" placeholder="Fokus (optional): UV-Schutz, Nachhaltigkeit...">
     </div>
-    <div class="control-row">
-      <span class="control-label">Plattform</span>
-      <button class="platform-btn active" data-platform="all">Alle</button>
-      <button class="platform-btn" data-platform="Reddit">Reddit</button>
-      <button class="platform-btn" data-platform="Trustpilot">Trustpilot</button>
-      <button class="platform-btn" data-platform="Instagram">Instagram</button>
-      <button class="platform-btn" data-platform="Google Reviews">Google Reviews</button>
-      <button class="platform-btn" data-platform="Amazon">Amazon</button>
-      <button class="platform-btn" data-platform="Fashion Blogs">Fashion Blogs</button>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Plattform</span>
+      <button class="plat-btn active" data-plat="Alle">Alle</button>
+      <button class="plat-btn" data-plat="Reddit">Reddit</button>
+      <button class="plat-btn" data-plat="Trustpilot">Trustpilot</button>
+      <button class="plat-btn" data-plat="Instagram">Instagram</button>
+      <button class="plat-btn" data-plat="Google Reviews">Google Reviews</button>
+      <button class="plat-btn" data-plat="Amazon">Amazon</button>
+      <button class="plat-btn" data-plat="Fashion Blogs">Fashion Blogs</button>
     </div>
   </div>
 
   <!-- STATS -->
-  <div class="stats-strip">
-    <div class="stat-box">
-      <span class="stat-n" id="statBrands">5</span>
-      <span class="stat-l">Marken analysiert</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-n" id="statReviews">—</span>
-      <span class="stat-l">Reviews verarbeitet</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-n" id="statCats">—</span>
-      <span class="stat-l">Kategorien identifiziert</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-n" id="statOpps">—</span>
-      <span class="stat-l">VERYLON-Opportunities</span>
-    </div>
+  <div class="stats">
+    <div class="stat"><span class="stat-n" id="sBrands">5</span><span class="stat-l">Marken analysiert</span></div>
+    <div class="stat"><span class="stat-n" id="sReviews">—</span><span class="stat-l">Synth. Reviews-Basis</span></div>
+    <div class="stat"><span class="stat-n" id="sCats">—</span><span class="stat-l">Kategorien</span></div>
+    <div class="stat"><span class="stat-n" id="sOpps">—</span><span class="stat-l">VERYLON-Opportunities</span></div>
   </div>
 
   <!-- CTA -->
-  <button class="cta-btn" id="analyzeBtn" onclick="runAnalysis()">
+  <button class="cta" id="analyzeBtn">
     ↳ Competitor-Feedback analysieren & für VERYLON gewichten
   </button>
+  <p class="cta-note">Synthetisierte Analyse · Basiert auf bekannten Marktmustern aus Community-Daten, Reviews & Fashion-Coverage</p>
 
   <!-- PROGRESS -->
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress-label" id="progressLabel">↳ Initialisiere Analyse...</div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
+  <div class="progress" id="progress">
+    <div class="progress-label" id="progressLabel">↳ Initialisiere...</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
   </div>
 
   <!-- ERROR -->
-  <div class="error-msg" id="errorMsg"></div>
+  <div class="error-box" id="errorBox"></div>
 
   <!-- RESULTS -->
-  <div class="results" id="results"></div>
+  <div id="results"></div>
 
 </main>
 
 <script>
 const BRAND_MAP = {
-  all: ["Retrosuperfuture", "Eyepetizer", "Mykita", "Messy Weekend", "Ace & Tate"],
-  retrosuperfuture: ["Retrosuperfuture"],
-  eyepetizer: ["Eyepetizer"],
-  mykita: ["Mykita"],
-  messyweekend: ["Messy Weekend"],
-  aceandtate: ["Ace & Tate"],
+  all:             ["Retrosuperfuture", "Eyepetizer", "Mykita", "Messy Weekend", "Ace & Tate"],
+  retrosuperfuture:["Retrosuperfuture"],
+  eyepetizer:      ["Eyepetizer"],
+  mykita:          ["Mykita"],
+  messyweekend:    ["Messy Weekend"],
+  aceandtate:      ["Ace & Tate"],
 };
 
 let activeBrand = "all";
-let activePlatform = "all";
+let activePlat  = "Alle";
 
-document.querySelectorAll('.brand-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+// Brand buttons
+document.querySelectorAll(".brand-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".brand-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
     activeBrand = btn.dataset.brand;
-    document.getElementById('customRow').classList.toggle('visible', activeBrand === 'custom');
-    const count = activeBrand === 'custom' ? 1 : (BRAND_MAP[activeBrand]?.length || 5);
-    document.getElementById('statBrands').textContent = count;
+    document.getElementById("customRow").classList.toggle("visible", activeBrand === "custom");
+    const count = activeBrand === "custom" ? 1 : (BRAND_MAP[activeBrand]?.length ?? 5);
+    document.getElementById("sBrands").textContent = count;
   });
 });
 
-document.querySelectorAll('.platform-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activePlatform = btn.dataset.platform;
+// Platform buttons
+document.querySelectorAll(".plat-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".plat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activePlat = btn.dataset.plat;
   });
 });
 
+// Progress helpers
 function setProgress(pct, label) {
-  const wrap = document.getElementById('progressWrap');
-  const fill = document.getElementById('progressFill');
-  const lbl = document.getElementById('progressLabel');
-  wrap.classList.toggle('visible', pct > 0 && pct < 100);
-  fill.style.width = pct + '%';
+  const wrap  = document.getElementById("progress");
+  const fill  = document.getElementById("progressFill");
+  const lbl   = document.getElementById("progressLabel");
+  const show  = pct > 0 && pct < 100;
+  wrap.classList.toggle("visible", show);
+  fill.style.width = pct + "%";
   if (label) lbl.textContent = label;
 }
 
+// Main analysis
+document.getElementById("analyzeBtn").addEventListener("click", runAnalysis);
+
 async function runAnalysis() {
-  const btn = document.getElementById('analyzeBtn');
-  const errEl = document.getElementById('errorMsg');
-  const results = document.getElementById('results');
+  const btn    = document.getElementById("analyzeBtn");
+  const errBox = document.getElementById("errorBox");
+  const res    = document.getElementById("results");
 
-  errEl.style.display = 'none';
-  results.classList.remove('visible');
-  btn.disabled = true;
+  errBox.style.display = "none";
+  res.style.display    = "none";
+  res.classList.remove("visible");
+  res.innerHTML = "";
+  btn.disabled  = true;
 
-  let brands;
-  if (activeBrand === 'custom') {
-    const raw = document.getElementById('customBrands').value.trim();
-    brands = raw ? raw.split(',').map(s => s.trim()).filter(Boolean) : ["Flatlist", "Dick Moby"];
-  } else {
-    brands = BRAND_MAP[activeBrand] || BRAND_MAP.all;
-  }
+  const brands = activeBrand === "custom"
+    ? (document.getElementById("customBrands").value.split(",").map(s=>s.trim()).filter(Boolean) || ["Flatlist"])
+    : BRAND_MAP[activeBrand] ?? BRAND_MAP.all;
 
-  const focus = document.getElementById('customFocus')?.value?.trim() || '';
-  const platform = activePlatform === 'all'
-    ? 'allen relevanten Plattformen (Reddit, Trustpilot, Instagram, Google Reviews, Amazon, Fashion Blogs)'
-    : activePlatform;
+  const focus = document.getElementById("customFocus")?.value?.trim() || "";
+  const plat  = activePlat === "Alle"
+    ? "allen relevanten Plattformen (Reddit, Trustpilot, Instagram, Google Reviews, Amazon, Fashion Blogs)"
+    : activePlat;
 
-  const SYSTEM = `Du bist ein Senior Brand Strategist und Consumer Insights Analyst, spezialisiert auf Premium-Eyewear und DTC-Modemarken in Europa.
+  const SYSTEM = `Du bist ein Senior Brand Strategist mit tiefem Wissen über den europäischen Premium-Eyewear-Markt.
 
-Du analysierst Kundenfeedback von Konkurrenzmarken im Premium-Sonnenbrillen-Segment für VERYLON.
+AUFGABE: Erstelle eine synthetisierte strategische Marktanalyse basierend auf deinem Trainingswissen über Kundenfeedback-Muster zu Premium-Sonnenbrillenmarken (Reddit, Trustpilot, Instagram, Fashion Blogs, Google Reviews). Synthetisiere bekannte Muster zu konkreten, realistischen Insights — du musst keine echten Reviews zitieren.
 
-VERYLON BRAND CONTEXT:
-- Name: VERYLON (Kunstwort, global trademark-frei, kein EU-Sprachkonflikt)
+VERYLON (Auftraggeber):
+- Neue Premium-DTC-Sonnenbrillenmarke, ~€200, DE → EU
 - Claim: "See the life you've built."
-- Positionierung: Eyewear an der Schnittstelle von zeitlosem Design und Augengesundheit/Longevity
-- Zielgruppe: 35–65 Jahre, modebewusst, selbstsicher, erklärungsfrei, DE → EU
-- Preispunkt: ~€200 mid-premium
-- Markenästhetik: Still, architektonisch, zeitlos (Referenz: Carlo Scarpa)
-- Differenzierung vs. Wettbewerb: VERYLON ist NICHT laut wie Retrosuperfuture, NICHT saisonal wie Eyepetizer — sondern zeitlos, ganzjährig, denkend
-- Brand Pillars: Vision (klares Sehen = Lebensqualität) · Endurance (zeitloses Design) · Refinement (ästhetische Präzision) · Your Way (selbstbewusste Identität) · Longevity (Augengesundheit) · Own Aesthetic (Stil als Ausdruck) · Now & Always (modern ohne vergänglich)
+- Zielgruppe: 35–65, modebewusst, selbstsicher
+- Ästhetik: still, architektonisch, zeitlos (Carlo Scarpa)
+- Differenzierung: NICHT laut wie RSF, NICHT saisonal wie Eyepetizer — zeitlos, ganzjährig
+- Pillars: Vision · Endurance · Refinement · Your Way · Longevity · Own Aesthetic · Now & Always
 
-Analysiere Kundenfeedback zu den Wettbewerbsmarken und antworte NUR mit einem validen JSON-Objekt. KEIN Markdown, KEINE Backticks, KEINE Erklärungen davor oder danach. Nur das JSON-Objekt beginend mit { und endend mit }.
+Antworte AUSSCHLIESSLICH mit einem validen JSON-Objekt. Kein Text davor, kein Text danach, keine Backticks, keine Erklärungen. Beginne direkt mit { und ende mit }.
 
-JSON-Struktur exakt so:
+Pflichtfelder:
 {
-  "meta": {
-    "brands": ["..."],
-    "estimated_reviews": 1500,
-    "categories_found": 12,
-    "opportunities": 6,
-    "analysis_summary": "2-3 Sätze strategisches Summary"
-  },
-  "sentiment_by_brand": [
-    {
-      "brand": "...",
-      "positive_score": 72,
-      "negative_score": 28,
-      "nps_estimate": 35,
-      "top_praise": "kurze Formulierung",
-      "top_complaint": "kurze Formulierung"
-    }
-  ],
+  "meta": { "brands": [], "estimated_reviews": 2400, "categories_found": 12, "opportunities": 6, "analysis_summary": "..." },
+  "sentiment_by_brand": [{ "brand": "...", "positive_score": 74, "negative_score": 26, "nps_estimate": 42, "top_praise": "...", "top_complaint": "..." }],
   "categories": {
-    "positive": [
-      {
-        "theme": "Thema",
-        "weight": "HIGH",
-        "priority": "P1",
-        "insight": "Konkreter Insight 1-2 Sätze",
-        "brand": "Marke",
-        "platform": "Quelle",
-        "luma_relevance": "Relevanz für VERYLON's Positionierung"
-      }
-    ],
-    "negative": [
-      {
-        "theme": "Thema",
-        "weight": "HIGH",
-        "priority": "P1",
-        "insight": "Konkreter Insight 1-2 Sätze",
-        "brand": "Marke",
-        "platform": "Quelle",
-        "luma_opportunity": "Wie VERYLON diesen Pain-Point löst"
-      }
-    ]
+    "positive": [{ "theme": "...", "weight": "HIGH", "priority": "P1", "insight": "...", "brand": "...", "platform": "...", "luma_relevance": "..." }],
+    "negative": [{ "theme": "...", "weight": "HIGH", "priority": "P1", "insight": "...", "brand": "...", "platform": "...", "luma_opportunity": "..." }]
   },
-  "priority_matrix": {
-    "act_now": ["Insight 1", "Insight 2", "Insight 3"],
-    "watch_closely": ["Insight 1", "Insight 2", "Insight 3"],
-    "consider_later": ["Insight 1", "Insight 2"],
-    "low_priority": ["Insight 1", "Insight 2"]
-  },
-  "opportunities": [
-    {
-      "title": "Opportunity-Name",
-      "tier": 1,
-      "description": "Was fehlt beim Wettbewerb, was VERYLON anbieten kann",
-      "signal": "Konkretes Feedback-Signal als Beweis"
-    }
-  ],
-  "representative_quotes": [
-    {
-      "text": "Realistischer Kundenkommentar-Stil",
-      "sentiment": "pos",
-      "brand": "...",
-      "platform": "...",
-      "strategic_weight": "HIGH"
-    }
-  ],
-  "verylon_implications": {
-    "positioning": ["Implikation 1", "Implikation 2", "Implikation 3"],
-    "product": ["Implikation 1", "Implikation 2", "Implikation 3"],
-    "communication": ["Implikation 1", "Implikation 2", "Implikation 3"]
-  }
+  "priority_matrix": { "act_now": [], "watch_closely": [], "consider_later": [], "low_priority": [] },
+  "opportunities": [{ "title": "...", "tier": 1, "description": "...", "signal": "..." }],
+  "representative_quotes": [{ "text": "...", "sentiment": "pos", "brand": "...", "platform": "...", "strategic_weight": "HIGH" }],
+  "verylon_implications": { "positioning": [], "product": [], "communication": [] }
 }`;
 
-  const USER = `Analysiere Kundenfeedback zu folgenden Sonnenbrillenmarken auf ${platform}:
-Marken: ${brands.join(', ')}
-${focus ? `Fokus: ${focus}` : ''}
+  const USER = `Synthetisiere eine strategische Marktanalyse für VERYLON zu folgenden Marken: ${brands.join(", ")}
+Plattform-Fokus: ${plat}
+${focus ? "Zusatz-Fokus: " + focus : ""}
 
-Liefere eine tiefe, realistische Analyse basierend auf bekannten Mustern im europäischen Premium-Sonnenbrillen-Segment (Reddit r/sunglasses, r/malefashionadvice, Trustpilot, Instagram-Kommentare, Google Reviews). Sei konkret und spezifisch. Gewichte nach strategischer Relevanz für VERYLON — eine neue Premium-DTC-Sonnenbrillenmarke für 35–65-Jährige mit "See the life you've built." als Claim.
-
-Mindestens: 6 positive Kategorien, 6 negative Kategorien, 6 Opportunities, 8 repräsentative Quotes. Alle Texte auf Deutsch. Antworte NUR mit dem JSON-Objekt, ohne irgendwelche Einleitungen.`;
-
-  setProgress(15, '↳ Verbinde mit AI-Analyse...');
+Mindestens: 6 positive Kategorien, 6 negative Kategorien, 6 Opportunities, 8 Quotes.
+Alle Texte auf Deutsch. Nur das JSON-Objekt als Antwort.`;
 
   try {
-    setProgress(35, '↳ Verarbeite Plattform-Feedback...');
+    setProgress(20, "↳ Verbinde mit AI-Analyse...");
 
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    const resp = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 4000,
-        system: SYSTEM,
-        messages: [{ role: "user", content: USER }]
-      })
+      body: JSON.stringify({ system: SYSTEM, messages: [{ role: "user", content: USER }] }),
     });
 
-    setProgress(65, '↳ Kategorisiere & gewichte Insights...');
+    setProgress(60, "↳ Verarbeite Feedback-Muster...");
 
     if (!resp.ok) {
       const e = await resp.json().catch(() => ({}));
-      throw new Error(e?.error?.message || `HTTP ${resp.status}`);
+      throw new Error(e?.error?.message || `Server-Fehler: HTTP ${resp.status}`);
     }
 
     const data = await resp.json();
-    setProgress(85, '↳ Erstelle strategische Auswertung...');
+    setProgress(85, "↳ Erstelle strategische Auswertung...");
 
-    // Extract text from content blocks
-    let raw = '';
+    // Extract text
+    let raw = "";
     if (Array.isArray(data.content)) {
-      data.content.forEach(block => {
-        if (block.type === 'text' && block.text) raw += block.text;
-      });
-    }
-
-    // Strip any markdown fences
-    raw = raw.trim();
-    const fenceStart = raw.indexOf('```');
-    if (fenceStart !== -1) {
-      const fenceEnd = raw.lastIndexOf('```');
-      if (fenceEnd > fenceStart) {
-        raw = raw.substring(fenceStart, fenceEnd + 3);
-        raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+      for (const block of data.content) {
+        if (block.type === "text") raw += block.text;
       }
     }
 
-    // Find the JSON object boundaries
-    const jsonStart = raw.indexOf('{');
-    const jsonEnd = raw.lastIndexOf('}');
-    if (jsonStart === -1 || jsonEnd === -1) throw new Error('Kein JSON in der API-Antwort gefunden.');
-    raw = raw.substring(jsonStart, jsonEnd + 1);
+    raw = raw.trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```\s*$/i, "")
+      .trim();
 
-    const parsed = JSON.parse(raw);
-    setProgress(100, '');
-    setTimeout(() => setProgress(0, ''), 400);
+    const s = raw.indexOf("{");
+    const e = raw.lastIndexOf("}");
+    if (s === -1 || e === -1) throw new Error("Kein JSON in der API-Antwort. Rohtext: " + raw.slice(0, 200));
 
-    // Update stats
-    document.getElementById('statBrands').textContent = parsed.meta?.brands?.length || brands.length;
-    document.getElementById('statReviews').textContent = (parsed.meta?.estimated_reviews || 0).toLocaleString('de-DE');
-    document.getElementById('statCats').textContent = parsed.meta?.categories_found || 0;
-    document.getElementById('statOpps').textContent = parsed.meta?.opportunities || 0;
+    let parsed;
+    try { parsed = JSON.parse(raw.substring(s, e + 1)); }
+    catch (pe) { throw new Error("JSON-Parse-Fehler: " + pe.message + " | Anfang: " + raw.slice(s, s + 150)); }
 
+    setProgress(100, "");
+    setTimeout(() => setProgress(0), 400);
+
+    updateStats(parsed, brands.length);
     renderResults(parsed);
     btn.disabled = false;
 
   } catch (err) {
-    setProgress(0, '');
-    errEl.style.display = 'block';
-    errEl.textContent = '↳ Analyse fehlgeschlagen: ' + (err.message || 'Unbekannter Fehler. Bitte erneut versuchen.');
+    setProgress(0);
+    errBox.style.display = "block";
+    errBox.textContent   = "↳ Analyse fehlgeschlagen: " + (err.message || "Unbekannter Fehler.");
     btn.disabled = false;
   }
 }
 
-function wc(w) { return { HIGH: 'HIGH', MEDIUM: 'MEDIUM', LOW: 'LOW' }[w] || 'MEDIUM'; }
-function pc(p) { return { P1: 'p1', P2: 'p2', P3: 'p3' }[p] || 'p3'; }
+function updateStats(d, fallbackCount) {
+  document.getElementById("sBrands").textContent  = d.meta?.brands?.length || fallbackCount;
+  const rev = d.meta?.estimated_reviews;
+  document.getElementById("sReviews").textContent = rev > 0 ? rev.toLocaleString("de-DE") : "—";
+  const cats = d.meta?.categories_found || ((d.categories?.positive?.length ?? 0) + (d.categories?.negative?.length ?? 0));
+  document.getElementById("sCats").textContent    = cats || "—";
+  const opps = d.meta?.opportunities || d.opportunities?.length;
+  document.getElementById("sOpps").textContent    = opps || "—";
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function pc(p)  { return { P1:"p1", P2:"p2", P3:"p3" }[p] || "p3"; }
+function wc(w)  { return ["HIGH","MEDIUM","LOW"].includes(w) ? w : "MEDIUM"; }
+function sign(n){ return n > 0 ? "+" : ""; }
+function esc(s) { return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function divider(title, count = "") {
+  return `<div class="divider fade">
+    <div class="div-line"></div>
+    <span class="div-title">${esc(title)}</span>
+    ${count ? `<span class="div-count">${esc(count)}</span>` : ""}
+    <div class="div-line"></div>
+  </div>`;
+}
 
 function renderResults(d) {
-  const el = document.getElementById('results');
+  const el = document.getElementById("results");
 
-  const sentimentRows = (d.sentiment_by_brand || []).map(b => `
-    <div class="st-row">
-      <div class="st-cell"><span class="brand-name-cell">${b.brand}</span></div>
-      <div class="st-cell">
-        <div class="bar-row">
-          <div class="bar-track pos-track"><div class="bar-fill pos" style="width:${b.positive_score}%"></div></div>
-          <span class="bar-pct">${b.positive_score}%</span>
-        </div>
-        <div class="bar-row">
-          <div class="bar-track neg-track"><div class="bar-fill neg" style="width:${b.negative_score}%"></div></div>
-          <span class="bar-pct">${b.negative_score}%</span>
+  // Sentiment rows
+  const sentRows = (d.sentiment_by_brand || []).map(b => `
+    <div class="sent-row">
+      <div class="sc"><span class="brand-cell">${esc(b.brand)}</span></div>
+      <div class="sc">
+        <div class="bar-wrap">
+          <div class="bar-row">
+            <div class="bar-track pos"><div class="bar-fill pos" style="width:${b.positive_score}%"></div></div>
+            <span class="bar-pct">${b.positive_score}%</span>
+          </div>
+          <div class="bar-row">
+            <div class="bar-track neg"><div class="bar-fill neg" style="width:${b.negative_score}%"></div></div>
+            <span class="bar-pct">${b.negative_score}%</span>
+          </div>
         </div>
       </div>
-      <div class="st-cell">
-        <div class="praise-complaint">
-          <div class="praise">+ ${b.top_praise}</div>
-          <div class="complaint">− ${b.top_complaint}</div>
+      <div class="sc">
+        <div class="pc-wrap">
+          <span class="pc-praise">+ ${esc(b.top_praise)}</span>
+          <span class="pc-comp">− ${esc(b.top_complaint)}</span>
         </div>
       </div>
-      <div class="st-cell"><span class="nps-num">${b.nps_estimate > 0 ? '+' : ''}${b.nps_estimate}</span></div>
-    </div>
-  `).join('');
+      <div class="sc nps-cell"><span class="nps-num">${sign(b.nps_estimate)}${b.nps_estimate}</span></div>
+    </div>`).join("");
 
-  const posCats = (d.categories?.positive || []).map(c => `
+  // Category items
+  const catItem = (c, type) => `
     <div class="cat-item">
       <div class="cat-dot ${pc(c.priority)}"></div>
-      <div class="cat-body">
-        <div class="cat-theme">${c.theme}</div>
-        <div class="cat-insight">${c.insight}</div>
-        <div class="cat-verylon pos-verylon">→ VERYLON: ${c.luma_relevance}</div>
+      <div>
+        <div class="cat-theme">${esc(c.theme)}</div>
+        <div class="cat-insight">${esc(c.insight)}</div>
+        <div class="cat-verylon ${type}">→ ${type === "pos" ? "VERYLON: " + esc(c.luma_relevance) : "VERYLON-Chance: " + esc(c.luma_opportunity)}</div>
       </div>
       <div class="cat-right">
-        <div class="weight-pill ${wc(c.weight)}">${c.weight}</div>
-        <div class="cat-platform">${c.platform}</div>
+        <span class="weight ${wc(c.weight)}">${wc(c.weight)}</span>
+        <div class="cat-platform">${esc(c.platform)}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
 
-  const negCats = (d.categories?.negative || []).map(c => `
-    <div class="cat-item">
-      <div class="cat-dot ${pc(c.priority)}"></div>
-      <div class="cat-body">
-        <div class="cat-theme">${c.theme}</div>
-        <div class="cat-insight">${c.insight}</div>
-        <div class="cat-verylon neg-verylon">→ VERYLON-Chance: ${c.luma_opportunity}</div>
-      </div>
-      <div class="cat-right">
-        <div class="weight-pill ${wc(c.weight)}">${c.weight}</div>
-        <div class="cat-platform">${c.platform}</div>
-      </div>
-    </div>
-  `).join('');
+  // Matrix items
+  const mItem = (items, cls) => (items || []).map(i => `<div class="m-item ${cls}">${esc(i)}</div>`).join("");
 
-  const matrixItems = (items, cls) => (items || []).map(i => `<div class="matrix-item ${cls}">${i}</div>`).join('');
-
+  // Opportunities
+  const tierColor = t => t === 1 ? "var(--gold)" : t === 2 ? "var(--sage)" : "var(--ash)";
   const opps = (d.opportunities || []).map((o, i) => `
-    <div class="opp-card tier-${o.tier}">
-      <div class="opp-stripe"></div>
-      <div class="opp-n">${String(i+1).padStart(2,'0')}</div>
-      <div class="opp-title">${o.title}</div>
-      <div class="opp-desc">${o.description}</div>
-      <div class="opp-signal">"${o.signal}"</div>
-    </div>
-  `).join('');
+    <div class="opp-card">
+      <div class="opp-stripe" style="background:${tierColor(o.tier)}"></div>
+      <div class="opp-n">${String(i+1).padStart(2,"0")}</div>
+      <div class="opp-title">${esc(o.title)}</div>
+      <div class="opp-desc">${esc(o.description)}</div>
+      <div class="opp-signal">"${esc(o.signal)}"</div>
+    </div>`).join("");
 
+  // Quotes
   const quotes = (d.representative_quotes || []).map(q => `
     <div class="quote-item">
-      <div class="quote-text ${q.sentiment}">"${q.text}"</div>
+      <div class="quote-text ${q.sentiment === "pos" ? "pos" : "neg"}">"${esc(q.text)}"</div>
       <div class="quote-meta">
-        <div class="quote-brand">${q.brand}</div>
-        <div class="quote-platform">${q.platform}</div>
-        <div class="quote-weight">${q.strategic_weight}</div>
+        <div class="q-brand">${esc(q.brand)}</div>
+        <div class="q-platform">${esc(q.platform)}</div>
+        <div class="q-weight">${esc(q.strategic_weight)}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join("");
 
-  const implCols = (d.verylon_implications || d.luma_implications || {});
-  const mkImpl = (arr) => (arr || []).map(p => `<div class="impl-point">${p}</div>`).join('');
+  // Implications
+  const impl = d.verylon_implications || d.luma_implications || {};
+  const implCol = (title, items) => `
+    <div>
+      <div class="impl-col-title">${title}</div>
+      ${(items || []).map(p => `<div class="impl-point">${esc(p)}</div>`).join("")}
+    </div>`;
 
   el.innerHTML = `
-    <div class="fade-up">
-      <div class="strategic-box">${d.meta?.analysis_summary || ''}</div>
+    <div class="summary fade">${esc(d.meta?.analysis_summary || "")}</div>
+
+    ${divider("Sentiment nach Marke", `${d.sentiment_by_brand?.length || 0} Marken · NPS-Schätzung`)}
+    <div class="sent-table fade">
+      <div class="sent-head">
+        <div class="sc hd">Marke</div>
+        <div class="sc hd">Pos / Neg</div>
+        <div class="sc hd">Top Praise · Complaint</div>
+        <div class="sc hd">NPS est.</div>
+      </div>
+      ${sentRows}
     </div>
 
-    <div class="fade-up">
-      <div class="section-divider">
-        <div class="section-divider-line"></div>
-        <span class="section-divider-title">Sentiment nach Marke</span>
-        <span class="section-divider-count">${d.sentiment_by_brand?.length || 0} Marken · NPS-Schätzung</span>
-        <div class="section-divider-line"></div>
-      </div>
-      <div class="sentiment-table">
-        <div class="st-header">
-          <div class="st-cell st-head-cell">Marke</div>
-          <div class="st-cell st-head-cell">Pos / Neg</div>
-          <div class="st-cell st-head-cell">Top Praise · Top Complaint</div>
-          <div class="st-cell st-head-cell">NPS est.</div>
+    ${divider("Kategorisiertes Feedback", "gewichtet nach VERYLON-Relevanz")}
+    <div class="cat-grid fade">
+      <div class="cat-col">
+        <div class="cat-col-head">
+          <span class="cat-col-title pos">↑ Was Kunden lieben</span>
+          <span class="cat-count">${d.categories?.positive?.length || 0} Themen</span>
         </div>
-        ${sentimentRows}
+        ${(d.categories?.positive || []).map(c => catItem(c, "pos")).join("")}
       </div>
-    </div>
-
-    <div class="fade-up">
-      <div class="section-divider">
-        <div class="section-divider-line"></div>
-        <span class="section-divider-title">Kategorisiertes Feedback</span>
-        <span class="section-divider-count">gewichtet nach VERYLON-Relevanz</span>
-        <div class="section-divider-line"></div>
-      </div>
-      <div class="cat-grid">
-        <div class="cat-col">
-          <div class="cat-col-head">
-            <span class="cat-col-title pos">↑ Was Kunden lieben</span>
-            <span class="cat-count">${d.categories?.positive?.length || 0} Themen</span>
-          </div>
-          ${posCats}
+      <div class="cat-col">
+        <div class="cat-col-head">
+          <span class="cat-col-title neg">↓ Pain Points & Kritik</span>
+          <span class="cat-count">${d.categories?.negative?.length || 0} Themen</span>
         </div>
-        <div class="cat-col">
-          <div class="cat-col-head">
-            <span class="cat-col-title neg">↓ Pain Points & Kritik</span>
-            <span class="cat-count">${d.categories?.negative?.length || 0} Themen</span>
-          </div>
-          ${negCats}
-        </div>
+        ${(d.categories?.negative || []).map(c => catItem(c, "neg")).join("")}
       </div>
     </div>
 
-    <div class="fade-up">
-      <div class="section-divider">
-        <div class="section-divider-line"></div>
-        <span class="section-divider-title">Strategische Prioritäts-Matrix</span>
-        <span class="section-divider-count">Wichtigkeit × Dringlichkeit</span>
-        <div class="section-divider-line"></div>
+    ${divider("Strategische Prioritäts-Matrix", "Wichtigkeit × Dringlichkeit")}
+    <div class="matrix-grid fade">
+      <div class="m-cell">
+        <div class="m-cell-head"><span class="m-label">Hoch Wichtig · Jetzt</span><span class="m-tag act">ACT NOW</span></div>
+        ${mItem(d.priority_matrix?.act_now, "act")}
       </div>
-      <div class="matrix-outer">
-        <div class="matrix-layout">
-          <div class="matrix-y-label">Niedrig ← Wichtigkeit → Hoch</div>
-          <div class="matrix-inner-wrap">
-            <div class="matrix-grid">
-              <div class="matrix-cell">
-                <div class="matrix-cell-head">
-                  <span class="matrix-cell-label">Hoch Wichtig · Jetzt</span>
-                  <span class="matrix-tag act">ACT NOW</span>
-                </div>
-                ${matrixItems(d.priority_matrix?.act_now, 'act')}
-              </div>
-              <div class="matrix-cell">
-                <div class="matrix-cell-head">
-                  <span class="matrix-cell-label">Niedrig Wichtig · Jetzt</span>
-                  <span class="matrix-tag watch">WATCH</span>
-                </div>
-                ${matrixItems(d.priority_matrix?.watch_closely, 'watch')}
-              </div>
-              <div class="matrix-cell">
-                <div class="matrix-cell-head">
-                  <span class="matrix-cell-label">Hoch Wichtig · Später</span>
-                  <span class="matrix-tag consider">CONSIDER</span>
-                </div>
-                ${matrixItems(d.priority_matrix?.consider_later, 'consider')}
-              </div>
-              <div class="matrix-cell">
-                <div class="matrix-cell-head">
-                  <span class="matrix-cell-label">Niedrig · Deprioritisieren</span>
-                  <span class="matrix-tag skip">SKIP</span>
-                </div>
-                ${matrixItems(d.priority_matrix?.low_priority, 'skip')}
-              </div>
-            </div>
-            <div class="matrix-x-label">Niedrig ← Dringlichkeit → Hoch</div>
-          </div>
-        </div>
+      <div class="m-cell">
+        <div class="m-cell-head"><span class="m-label">Niedrig Wichtig · Jetzt</span><span class="m-tag watch">WATCH</span></div>
+        ${mItem(d.priority_matrix?.watch_closely, "watch")}
+      </div>
+      <div class="m-cell">
+        <div class="m-cell-head"><span class="m-label">Hoch Wichtig · Später</span><span class="m-tag cons">CONSIDER</span></div>
+        ${mItem(d.priority_matrix?.consider_later, "cons")}
+      </div>
+      <div class="m-cell">
+        <div class="m-cell-head"><span class="m-label">Deprioritisieren</span><span class="m-tag skip">SKIP</span></div>
+        ${mItem(d.priority_matrix?.low_priority, "skip")}
       </div>
     </div>
 
-    <div class="fade-up">
-      <div class="section-divider">
-        <div class="section-divider-line"></div>
-        <span class="section-divider-title">VERYLON Positioning Opportunities</span>
-        <span class="section-divider-count">aus Wettbewerbs-Gaps abgeleitet</span>
-        <div class="section-divider-line"></div>
-      </div>
-      <div class="opp-grid">${opps}</div>
-    </div>
+    ${divider("VERYLON Positioning Opportunities", "aus Wettbewerbs-Gaps")}
+    <div class="opp-grid fade">${opps}</div>
 
-    <div class="fade-up">
-      <div class="section-divider">
-        <div class="section-divider-line"></div>
-        <span class="section-divider-title">Repräsentative Kundenaussagen</span>
-        <span class="section-divider-count">reale Sprachmuster von Zielkunden</span>
-        <div class="section-divider-line"></div>
-      </div>
-      <div class="quotes-list">${quotes}</div>
-    </div>
+    ${divider("Repräsentative Kundenaussagen", "synthetisierte Review-Muster")}
+    <div class="quotes fade">${quotes}</div>
 
-    <div class="fade-up">
-      <div class="section-divider">
-        <div class="section-divider-line"></div>
-        <span class="section-divider-title">Strategische Implikationen</span>
-        <span class="section-divider-count">für VERYLON's Markteinritt</span>
-        <div class="section-divider-line"></div>
+    ${divider("Strategische Implikationen für VERYLON")}
+    <div class="impl fade">
+      <div class="impl-head"><em>VERYLON</em> — Strategische Implikationen</div>
+      <div class="impl-cols">
+        ${implCol("Positionierung", impl.positioning)}
+        ${implCol("Produkt", impl.product)}
+        ${implCol("Kommunikation", impl.communication)}
       </div>
-      <div class="impl-block">
-        <div class="impl-header">— Strategische Implikationen für VERYLON</div>
-        <div class="impl-cols">
-          <div>
-            <div class="impl-col-title">Positionierung</div>
-            ${mkImpl(implCols.positioning)}
-          </div>
-          <div>
-            <div class="impl-col-title">Produkt</div>
-            ${mkImpl(implCols.product)}
-          </div>
-          <div>
-            <div class="impl-col-title">Kommunikation</div>
-            ${mkImpl(implCols.communication)}
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+    </div>`;
 
-  el.classList.add('visible');
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.style.display = "block";
+  el.classList.add("visible");
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 </script>
 </body>
